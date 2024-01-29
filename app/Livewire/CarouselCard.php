@@ -10,6 +10,9 @@ class CarouselCard extends Component
         'img1.jpg',
         'img2.jpg',
         'img3.jpg',
+        'img4.jpeg',
+        'img5.jpeg',
+        'img6.jpeg',
     ];
 
     public function render()
