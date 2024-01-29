@@ -1,4 +1,31 @@
-<div class="flex flex-col h-full min-h-72 md:min-h-96 bg-white shadow-sm rounded-xl dark:bg-gray-900">
+<div
+    x-data="{
+        images: {{ Js::from($images) }},
+        selected: 0,
+        nextImage() {
+            this.selected++
+            if (this.selected == this.images.length) {
+                this.selected = 0
+            }
+        },
+        previousImage() {
+            this.selected--
+            if (this.selected < 0) {
+                this.selected = this.images.length - 1
+            }
+        }
+    }"
+    class="
+        flex
+        flex-col
+        h-full
+        min-h-72
+        md:min-h-96
+        bg-white
+        shadow-sm
+        rounded-xl
+        dark:bg-gray-900"
+>
     {{-- Carousel --}}
     <div class="flex flex-col flex-1 justify-center items-center relative">
         <div class="
@@ -24,10 +51,12 @@
                         min-h-52
                         md:min-h-80
                         rounded-t-xl"
-                    style="background-image: url('{{ asset('storage/img1.jpg') }}')"></div>
+                    x-bind:style="`background-image: url('{{ asset('storage/${images[selected]}') }}');`">
+                </div>
             </div>
         </div>
         <button
+            x-on:click="previousImage()"
             type="button"
             class="
                 absolute
@@ -50,6 +79,7 @@
         </button>
 
         <button
+            x-on:click="nextImage()"
             type="button"
             class="
                 absolute
@@ -72,35 +102,19 @@
         </button>
 
         <div class="flex justify-center absolute -bottom-5 start-0 end-0 space-x-2">
-            <span
-                class="
-                    w-3 h-3
-                    border
-                    border-blue-600
-                    dark:border-amber-600
-                    rounded-full
-                    cursor-pointer
-                    bg-blue-600
-                    dark:bg-amber-600"
-            ></span>
-            <span
-                class="
-                    w-3 h-3
-                    border
-                    border-blue-600
-                    dark:border-amber-600
-                    rounded-full
-                    cursor-pointer"
-            ></span>
-            <span
-                class="
-                    w-3 h-3
-                    border
-                    border-blue-600
-                    dark:border-amber-600
-                    rounded-full
-                    cursor-pointer"
-            ></span>
+            <template x-for="(image, index) in images">
+                <span
+                    x-on:click="selected = index"
+                    x-bind:class="{'bg-blue-600 dark:bg-amber-600': index == selected}"
+                    class="
+                        w-3 h-3
+                        border
+                        border-blue-600
+                        dark:border-amber-600
+                        rounded-full
+                        cursor-pointer"
+                ></span>
+            </template>
 
         </div>
     </div>
